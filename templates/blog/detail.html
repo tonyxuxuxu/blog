@@ -9,8 +9,8 @@
                 <span class="post-date"><a href="#"><time class="entry-date"
                                                           datetime="{{ post.created_time }}">{{ post.created_time }}</time></a></span>
                 <span class="post-author"><a href="#">{{ post.author }}</a></span>
-                <span class="comments-link"><a href="#">4 评论</a></span>
-                <span class="views-count"><a href="#">{{ post.views }} 阅读</a></span>
+                <span class="comments-link"><a href="#">{{ post.comment_set.count }} comments</a></span>
+                <span class="views-count"><a href="#">{{ post.views }} views</a></span>
             </div>
         </header>
         <div class="entry-content clearfix">
@@ -19,35 +19,35 @@
     </article>
     <section class="comment-area" id="comment-area">
         <hr>
-        <h3>发表评论</h3>
+        <h3>add comment</h3>
         <form action="{% url 'comments:post_comment' post.pk %}" method="post" class="comment-form">
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-4">
-                    <label for="{{ form.name.id_for_label }}">名字：</label>
+                    <label for="{{ form.name.id_for_label }}">name：</label>
                     {{ form.name }}
                     {{ form.name.errors }}
                 </div>
                 <div class="col-md-4">
-                    <label for="{{form.email.id_for_label }}">邮箱：</label>
+                    <label for="{{form.email.id_for_label }}">email：</label>
                     {{ form.email }}
                     {{ form.email.errors }}
                 </div>
                 <div class="col-md-4">
-                    <label for="{{ form.url.id_for_label }}">网址：</label>
+                    <label for="{{ form.url.id_for_label }}">website：</label>
                     {{ form.url}}
                     {{ form.url.errors }}
                 </div>
                 <div class="col-md-12">
-                    <label for="{{ form.text.id_for_label }}">评论：</label>
+                    <label for="{{ form.text.id_for_label }}">comments：</label>
                     {{ form.text }}
                     {{ form.text.errors }}
-                    <button type="submit" class="comment-btn">发表</button>
+                    <button type="submit" class="comment-btn">submit</button>
                 </div>
             </div>    <!-- row -->
         </form>
         <div class="comment-list-panel">
-            <h3>评论列表，共 <span>4</span> 条评论</h3>
+            <h3>There are <span>{{ post.comment_set.count }}</span> comments</h3>
             <ul class="comment-list list-unstyled">
                 {% for comment in comment_list%}
                 <li class="comment-item">
@@ -58,7 +58,7 @@
                     </div>
                 </li>
                 {% empty %}
-                暂无评论
+                No comments
                 {% endfor %}
             </ul>
         </div>
@@ -66,7 +66,7 @@
 {% endblock main %}
 {% block toc %}
     <div class="widget widget-content">
-        <h3 class="widget-title">文章目录</h3>
+        <h3 class="widget-title">post catalog</h3>
         {{ post.toc|safe }}
     </div>
 {% endblock toc %}
